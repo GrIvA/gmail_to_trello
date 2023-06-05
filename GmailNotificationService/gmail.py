@@ -134,7 +134,6 @@ def ModelFromMessageJSON(json):
                 })
         else:
             for part in payload['parts']:
-                print(part('mimeType'))
                 if part['body']['size'] > 0:
                     # body text
                     if part['mimeType'] == 'text/plain':
