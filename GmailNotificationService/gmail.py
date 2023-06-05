@@ -178,11 +178,12 @@ def ReturnMessagesAsGmailModels() -> array:
 
     messages_array = []
     try:
-#        recentChanges = ListChanges(global_history_id)
-#        _UpdateLatesHistory(recentChanges)
-#        messages = _ExtractMessagesId(recentChanges)
+        recentChanges = ListChanges(global_history_id)
+        _UpdateLatesHistory(recentChanges)
+        messages = _ExtractMessagesId(recentChanges)
 
-        messages = ['18885b038747becc']
+        print("=== new messages ===")
+        print(messages)
         for item in GetMessages(messages):
 #            print(item)
             gmail = ModelFromMessageJSON(item)

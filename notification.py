@@ -42,7 +42,7 @@ def InitiatePushNotification():
 
     try:
         for message in messages_array:
-            print(message)
+#            print(message)
             CreateNewTrelloNotification(message)
             print('Added message from <%s>' % (message['headers']['From']))
     except Exception as err:
