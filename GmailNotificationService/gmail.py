@@ -130,7 +130,7 @@ def ModelFromMessageJSON(json):
                 # body text
                 if 'body' in part and part['body']['size'] > 0 \
                         and 'mimeType' in part and part['mimeType'] == 'text/plain':
-                    data = '%s%s' % (body, part['body']['data'])
+                    body = '%s%s' % (body, body_decode(part['body']['data']))
 
                 # body html
                 if 'body' in part and part['body']['size'] > 0 \
@@ -142,7 +142,7 @@ def ModelFromMessageJSON(json):
                     })
 
                 # attachments
-                if 'mimeType' in part and part['mimeType'] != 'text/plain':
+                if 'mimeType' in part and part['mimeType'] != 'text/plain' and part['mimeType'] != 'text/html':
                     if part['filename']:
                         if 'data' in part['body']:
                             data=part['body']['data']
@@ -158,7 +158,6 @@ def ModelFromMessageJSON(json):
                     })
 
         gmail['decoded_body'] = body
-
         return gmail
     except KeyError as e:
         print(traceback.print_exception(e))
