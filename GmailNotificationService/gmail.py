@@ -130,7 +130,8 @@ def ModelFromMessageJSON(json):
                 # body
                 if 'body' in part and part['body']['size'] > 0 \
                         and 'mimeType' in part and part['mimeType'] == 'text/plain':
-                    body = '%s%s' % (body, body_decode(part['body']['data']))
+
+                    data = '%s%s' % (body, part['body']['data'])
 
                 # attachments
                 if 'mimeType' in part and part['mimeType'] != 'text/plain':
