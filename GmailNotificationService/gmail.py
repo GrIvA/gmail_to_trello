@@ -127,37 +127,37 @@ def ModelFromMessageJSON(json):
             body = body_decode(payload['body']['data'])
         else:
             for part in payload['parts']:
-                # body text
-                if 'body' in part and part['body']['size'] > 0 \
-                        and 'mimeType' in part and part['mimeType'] == 'text/plain':
-                    body = '%s%s' % (body, body_decode(part['body']['data']))
+                if part['body']['size'] > 0:
+                    # body text
+                    if part['mimeType'] == 'text/plain':
+                        body = '%s%s' % (body, body_decode(part['body']['data']))
 
-                # body html
-                if 'body' in part and part['body']['size'] > 0 \
-                        and 'mimeType' in part and part['mimeType'] == 'text/html':
-                    gmail['attach'].append({
-                        'data': part['body']['data'],
-                        'name': 'body.html',
-                        'mime': part['mimeType']
-                    })
+                    # body html
+                    if  part['mimeType'] == 'text/html':
+                        gmail['attach'].append({
+                            'data': part['body']['data'],
+                            'name': 'body.html',
+                            'mime': part['mimeType']
+                        })
 
-                # attachments
-                if 'mimeType' in part and part['mimeType'] != 'text/plain' and part['mimeType'] != 'text/html':
-                    if part['filename']:
-                        if 'data' in part['body']:
-                            data=part['body']['data']
-                        else:
-                            att_id=part['body']['attachmentId']
-                            att=AttachmentGmailService(message_id, att_id)
-                            data=att['data']
+                    # attachments
+                    if part['mimeType'] != 'text/plain' and part['mimeType'] != 'text/html':
+                        if part['filename']:
+                            if 'data' in part['body']:
+                                data=part['body']['data']
+                            else:
+                                att_id=part['body']['attachmentId']
+                                att=AttachmentGmailService(message_id, att_id)
+                                data=att['data']
 
-                    gmail['attach'].append({
-                        'data': data,
-                        'name': part['filename'],
-                        'mime': part['mimeType']
-                    })
+                        gmail['attach'].append({
+                            'data': data,
+                            'name': part['filename'],
+                            'mime': part['mimeType']
+                        })
 
         gmail['decoded_body'] = body
+#        print(gmail)
         return gmail
     except KeyError as e:
         print(traceback.print_exception(e))
@@ -190,6 +190,7 @@ def ReturnMessagesAsGmailModels() -> array:
         _UpdateLatesHistory(recentChanges)
         messages = _ExtractMessagesId(recentChanges)
 
+#        messages = ['1888ae82c9a0d997']
         print("=== new messages ===")
         print(messages)
         for item in GetMessages(messages):
