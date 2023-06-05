@@ -124,9 +124,17 @@ def ModelFromMessageJSON(json):
 
         body = ''
         if 'body' in payload and payload['body']['size'] > 0:
-            body = body_decode(payload['body']['data'])
+            if payload['mimeType'] == 'text/plain':
+                body = body_decode(payload['body']['data'])
+            else:
+                gmail['attach'].append({
+                    'data': payload['body']['data'],
+                    'name': 'body.html',
+                    'mime': payload['mimeType']
+                })
         else:
             for part in payload['parts']:
+                print(part('mimeType'))
                 if part['body']['size'] > 0:
                     # body text
                     if part['mimeType'] == 'text/plain':
